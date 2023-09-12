@@ -2,34 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <style>
     #stiky {
-        position: sticky;
-        top: 10px;
+        position:sticky ;
+        top: 20px;
         bottom: 20px;
-
-    }
-
-    .news-item {
-        margin: 10px;
-    }
-
-    .custom-list {
-        padding: 0;
-        list-style: none;
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .custom-list li {
-        margin-right: 10px;
-        width: calc(300px); /* 3개씩 표시하므로 33.33%로 설정 */
-        box-sizing: border-box; /* 요소의 padding과 border를 포함하여 크기 계산 */
-    }
-
-    /* 미디어 쿼리: 화면 크기가 768px 이하일 때 한 줄에 2개로 변경 */
-    @media (max-width: 768px) {
-        .custom-list li {
-            width: calc(50% - 10px); /* 화면 크기가 768px 이하일 때 2개씩 표시하므로 50%로 설정 */
-        }
     }
 
     /* 공모자들 타이틀 폰트 */
@@ -45,14 +20,12 @@
         justify-content: center;
         align-items: center;
     }
-
     .sidebar-brand-text {
         font-family: 'yg-jalnan', sans-serif;
         font-size: 23px;
         font-weight: bold;
         color: #5D5D5D;
     }
-
 </style>
 
 <head>
@@ -264,7 +237,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script th:inline="javascript">
-    const socket = new WebSocket('ws://localhost:8080/chatting');
+    const socket = new WebSocket('ws://13.209.58.79:8080/chatting');
     const pathname = window.location.pathname;
     const chatRoomId = parseInt(pathname.split("/")[2]);
     const stompClient = Stomp.over(socket);
