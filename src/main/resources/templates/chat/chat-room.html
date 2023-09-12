@@ -237,7 +237,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script th:inline="javascript">
-    const socket = new WebSocket('ws://13.209.58.79:8080/chatting');
+    const socket = new WebSocket('ws://localhost:8080/chatting');
     const pathname = window.location.pathname;
     const chatRoomId = parseInt(pathname.split("/")[2]);
     const stompClient = Stomp.over(socket);
@@ -434,9 +434,6 @@
         });
     }
 
-
-</script>
-<script>
     function fnMoveIndex(targetPage, seq) {
         // 이동할 대상 페이지의 URL
         var targetURL = targetPage + "#div" + seq;
