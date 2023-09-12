@@ -242,6 +242,16 @@
     });
   }
 </script>
+<script>
+  function fnMoveIndex(targetPage, seq) {
+    // 이동할 대상 페이지의 URL
+    var targetURL = targetPage + "#div" + seq;
+
+    // 새로운 페이지로 이동
+    window.location.href = targetURL;
+  }
+
+</script>
 
 <!-- script 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
