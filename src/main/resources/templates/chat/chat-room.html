@@ -56,7 +56,7 @@
 <div id="wrapper">
 
     <!-- 사이드바 -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
             <div class="sidebar-brand-icon rotate-n-15">
@@ -131,7 +131,10 @@
                 <!-- 공모자들 제목-->
                 <div class="horizontal-container">
                     <!--                    <img src="/static/bootstrap/img/공모자들로고-002.png" alt="공모자들로고" style="width: 48px;">-->
-                    <div class="sidebar-brand-text mx-3">공모자들<sup></sup></div>
+
+                    <a href="/">
+                        <div class="sidebar-brand-text mx-3">공모자들<sup></sup></div>
+                    </a>
                 </div>
 
                 <!-- Topbar Navbar -->
@@ -179,27 +182,27 @@
             <div class="container-fluid">
                 <h1 th:utext="${stockName + '<br>채팅방'}" class="ellipsis-text"></h1>
                 <style>
-                    #messages {
-                        height: 500px;
-                        width: 100%;
-                        overflow-y: scroll;
-                    }
-                    .my-message {
-                        text-align: right;
-                    }
-                    .other-message {
-                        text-align: left;
-                    }
-                    .admin-message {
-                        text-align: center;
-                        font-weight: bold;
-                    }
-                    .ellipsis-text {
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-                </style>
+                  #messages {
+                      height: 500px;
+                      width: 100%;
+                      overflow-y: scroll;
+                  }
+                  .my-message {
+                      text-align: right;
+                  }
+                  .other-message {
+                      text-align: left;
+                  }
+                  .admin-message {
+                      text-align: center;
+                      font-weight: bold;
+                  }
+                  .ellipsis-text {
+                      overflow: hidden;
+                      white-space: nowrap;
+                      text-overflow: ellipsis;
+                  }
+              </style>
                 <div id="chat">
                     <div id="messages">
                         <div th:each="message : ${chatMessages}">
@@ -213,227 +216,226 @@
 
                         </div>
                     </div>
-                    <input type="text" id="message" placeholder="메시지를 입력하세요.">
-                    <button class="send-button btn btn-primary" onclick="sendMessageWithDateCheck()">보내기</button><br>
-                    <br>
-                    <button class="chat-room-button btn btn-primary" onclick="window.location.href='/chat/list'">참여중인 채팅방</button><br>
-                    <br>
-                    <button class="leave-chat-button btn btn-primary" onclick="leaveChatRoom()">채팅방 나가기</button>
+                <input type="text" id="message" placeholder="메시지를 입력하세요.">
+                <button class="send-button btn btn-primary" onclick="sendMessageWithDateCheck()">보내기</button><br>
+                <br>
+                <button class="chat-room-button btn btn-primary" onclick="window.location.href='/chat/list'">참여중인 채팅방</button><br>
+                <br>
+                <button class="leave-chat-button btn btn-primary" onclick="leaveChatRoom()">채팅방 나가기</button>
                 </div>
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; gongmoja 2023</span>
-                </div>
-            </div>
-        </footer>
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; gongmoja 2023</span>
+        </div>
     </div>
+</footer>
+</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script th:inline="javascript">
-    const socket = new WebSocket('ws://13.209.58.79:8080/chatting');
-    const pathname = window.location.pathname;
-    const chatRoomId = parseInt(pathname.split("/")[2]);
-    const stompClient = Stomp.over(socket);
-    const today = new Date(); // 현재 날짜 가져오기
-    var currentUserId = /*[[${currentUserId}]]*/ 0;
-    let isValid = false;
-    const MessageType = {
-        CHAT: 'CHAT',
-        DATE: 'DATE',
-    };
+  const socket = new WebSocket('ws://gongmoja.store/chatting');
+  const pathname = window.location.pathname;
+  const chatRoomId = parseInt(pathname.split("/")[2]);
+  const stompClient = Stomp.over(socket);
+  const today = new Date(); // 현재 날짜 가져오기
+  var currentUserId = /*[[${currentUserId}]]*/ 0;
+  let isValid = false;
+  const MessageType = {
+      CHAT: 'CHAT',
+      DATE: 'DATE',
+  };
 
-    function scrollToBottom() {
-        const messagesDiv = document.getElementById('messages');
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
+  function scrollToBottom() {
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
 
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe(`/topic/${chatRoomId}`, function (message) {
-            showMessage(JSON.parse(message.body));
-        });
+  stompClient.connect({}, function (frame) {
+    console.log('Connected: ' + frame);
+    stompClient.subscribe(`/topic/${chatRoomId}`, function (message) {
+      showMessage(JSON.parse(message.body));
     });
+  });
 
-    function sendMessageWithDateCheck() {
-        // 여기에서 날짜 검증 로직을 수행합니다.
-        dateCheck(chatRoomId, function (isValid) {
-            if (isValid) {
-                // 날짜 메시지를 보냅니다.
-                sendDateMessage();
-            }
+  function sendMessageWithDateCheck() {
+      // 여기에서 날짜 검증 로직을 수행합니다.
+      dateCheck(chatRoomId, function (isValid) {
+          if (isValid) {
+              // 날짜 메시지를 보냅니다.
+              sendDateMessage();
+          }
 
-            // 그리고 메시지를 보냅니다.
-            sendMessage();
-        });
+          // 그리고 메시지를 보냅니다.
+          sendMessage();
+      });
+  }
+
+  function dateCheck(chatRoomId, callback) {
+      fetch(`/chat/date-check?chatRoomId=${chatRoomId}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      })
+          .then(response => {
+              if (response.status === 200) {
+                  return response.json();
+              } else {
+                  console.error('오류 발생');
+                  throw new Error('날짜 검증 실패');
+              }
+          })
+          .then(dateNeeded => {
+              const isValid = dateNeeded;
+              callback(isValid); // 콜백 함수 호출
+          })
+          .catch(error => {
+              console.error('오류 발생', error);
+              callback(false); // 에러 발생 시 false 전달
+          });
+  }
+
+  function sendDateMessage() {
+      const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+      stompClient.send("/app/date", {}, JSON.stringify({
+          "chatRoomId": chatRoomId,
+          "message": formattedDate,
+          "sentTime": today.toISOString(),
+          "type" : MessageType.DATE
+      }));
+  }
+
+  function sendMessage() {
+      const messageInput = document.getElementById('message');
+      const message = messageInput.value;
+      if (message.trim() !== '') {
+          stompClient.send("/app/chat", {}, JSON.stringify({
+              "chatRoomId": chatRoomId,
+              "message": message,
+              "sentTime": today.toISOString(),
+              "type" : MessageType.CHAT
+          }));
+          messageInput.value = '';
+      }
+  }
+
+
+
+  function formatTime(dateString) {
+      const date = new Date(dateString);
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+
+      // 시간과 분을 원하는 형식으로 포맷팅
+      const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+      return formattedTime;
+  }
+
+
+  // showMessage 함수에서 메시지 유형을 확인하여 처리합니다.
+  function showMessage(message) {
+      const messagesDiv = document.getElementById('messages');
+      const messageP = document.createElement('p');
+      const type = message.type;
+
+      if (type === "DATE") {
+          // 센드데이트메시지인 경우 별도로 처리
+          processDateMessage(message);
+      } else {
+          // 일반 메시지인 경우
+          const formattedTime = formatTime(message.sentTime);
+
+          if (message.senderId === 1) {
+              messageP.innerHTML = message.message;
+              messageP.className = "admin-message";
+          } else if(currentUserId === message.senderId){
+              messageP.innerHTML = formattedTime + "<br>" + message.sender + ": " + message.message;
+              messageP.className = "my-message";
+          } else{
+              messageP.innerHTML = formattedTime + "<br>" + message.sender + ": " + message.message;
+              messageP.className = "other-message";
+          }
+          messagesDiv.appendChild(messageP);
+          scrollToBottom();
+      }
+  }
+
+  function processDateMessage(message) {
+      const messagesDiv = document.getElementById('messages');
+      const messageP = document.createElement('p');
+      messageP.innerHTML = message.message;
+      messageP.className = "admin-message";
+      messagesDiv.appendChild(messageP);
+      scrollToBottom();
+  }
+
+      // 엔터 키로 메시지 전송을 가능하게 하는 코드
+  const messageInput = document.getElementById('message');
+  messageInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        sendMessageWithDateCheck();
     }
+  });
 
-    function dateCheck(chatRoomId, callback) {
-        fetch(`/chat/date-check?chatRoomId=${chatRoomId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                } else {
-                    console.error('오류 발생');
-                    throw new Error('날짜 검증 실패');
-                }
-            })
-            .then(dateNeeded => {
-                const isValid = dateNeeded;
-                callback(isValid); // 콜백 함수 호출
-            })
-            .catch(error => {
-                console.error('오류 발생', error);
-                callback(false); // 에러 발생 시 false 전달
-            });
-    }
+  document.addEventListener('DOMContentLoaded', function() {
+    scrollToBottom();
+  });
 
-    function sendDateMessage() {
-        const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
-        stompClient.send("/app/date", {}, JSON.stringify({
-            "chatRoomId": chatRoomId,
-            "message": formattedDate,
-            "sentTime": today.toISOString(),
-            "type" : MessageType.DATE
-        }));
-    }
+  var endDateTimeStr = /*[[${endDate}]]*/ '';
+  var endDateTime = new Date(endDateTimeStr);
 
-    function sendMessage() {
-        const messageInput = document.getElementById('message');
-        const message = messageInput.value;
-        if (message.trim() !== '') {
-            stompClient.send("/app/chat", {}, JSON.stringify({
-                "chatRoomId": chatRoomId,
-                "message": message,
-                "sentTime": today.toISOString(),
-                "type" : MessageType.CHAT
-            }));
-            messageInput.value = '';
-        }
-    }
-
-
-
-    function formatTime(dateString) {
-        const date = new Date(dateString);
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-
-        // 시간과 분을 원하는 형식으로 포맷팅
-        const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-        return formattedTime;
-    }
-
-
-    // showMessage 함수에서 메시지 유형을 확인하여 처리합니다.
-    function showMessage(message) {
-        const messagesDiv = document.getElementById('messages');
-        const messageP = document.createElement('p');
-        const type = message.type;
-
-        if (type === "DATE") {
-            // 센드데이트메시지인 경우 별도로 처리
-            processDateMessage(message);
-        } else {
-            // 일반 메시지인 경우
-            const formattedTime = formatTime(message.sentTime);
-
-            if (message.senderId === 1) {
-                messageP.innerHTML = message.message;
-                messageP.className = "admin-message";
-            } else if(currentUserId === message.senderId){
-                messageP.innerHTML = formattedTime + "<br>" + message.sender + ": " + message.message;
-                messageP.className = "my-message";
-            } else{
-                messageP.innerHTML = formattedTime + "<br>" + message.sender + ": " + message.message;
-                messageP.className = "other-message";
-            }
-            messagesDiv.appendChild(messageP);
-            scrollToBottom();
-        }
-    }
-
-    function processDateMessage(message) {
-        const messagesDiv = document.getElementById('messages');
-        const messageP = document.createElement('p');
-        messageP.innerHTML = message.message;
-        messageP.className = "admin-message";
-        messagesDiv.appendChild(messageP);
-        scrollToBottom();
-    }
-
-    // 엔터 키로 메시지 전송을 가능하게 하는 코드
+  function disableChat() {
+    // 메시지 입력 상자 비활성화
     const messageInput = document.getElementById('message');
-    messageInput.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            sendMessageWithDateCheck();
-        }
-    });
+    messageInput.disabled = true;
+    messageInput.placeholder = "만료된 채팅방입니다.";
 
-    document.addEventListener('DOMContentLoaded', function() {
-        scrollToBottom();
-    });
+    const sendButton = document.querySelector('.send-button');
+    sendButton.style.display = 'none';
+  }
 
-    var endDateTimeStr = /*[[${endDate}]]*/ '';
-    var endDateTime = new Date(endDateTimeStr);
+  function checkEndDateTime() {
+      var currentDateTime = new Date();
+      if (currentDateTime >= endDateTime) {
+          disableChat();
+      }
+  }
 
-    function disableChat() {
-        // 메시지 입력 상자 비활성화
-        const messageInput = document.getElementById('message');
-        messageInput.disabled = true;
-        messageInput.placeholder = "만료된 채팅방입니다.";
+  setInterval(checkEndDateTime, 1000);
 
-        const sendButton = document.querySelector('.send-button');
-        sendButton.style.display = 'none';
-    }
+  window.onload = checkEndDateTime;
 
-    function checkEndDateTime() {
-        var currentDateTime = new Date();
-        if (currentDateTime >= endDateTime) {
-            disableChat();
-        }
-    }
+  function fnMoveIndex(targetPage, seq) {
+      // 이동할 대상 페이지의 URL
+      var targetURL = targetPage + "#div" + seq;
 
-    setInterval(checkEndDateTime, 1000);
+      // 새로운 페이지로 이동
+      window.location.href = targetURL;
+  }
 
-    window.onload = checkEndDateTime;
+  function leaveChatRoom() {
+      var method = 'POST';
+      var url = '/chat/delete-from/' + chatRoomId;
 
-    function fnMoveIndex(targetPage, seq) {
-        // 이동할 대상 페이지의 URL
-        var targetURL = targetPage + "#div" + seq;
-
-        // 새로운 페이지로 이동
-        window.location.href = targetURL;
-    }
-
-    function leaveChatRoom() {
-        var method = 'POST';
-        var url = '/chat/delete-from/' + chatRoomId;
-
-        fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8'
-            }
-        }).then(function(response) {
-            if (response.ok) {
-                // 채팅방을 나갔다는 메시지를 받았을 때, /chat/list로 리다이렉트
-                window.location.href = '/chat/list';
-            }
-        });
-    }
-
+      fetch(url, {
+          method: method,
+          headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+          }
+      }).then(function(response) {
+          if (response.ok) {
+              // 채팅방을 나갔다는 메시지를 받았을 때, /chat/list로 리다이렉트
+              window.location.href = '/chat/list';
+          }
+      });
+  }
     function fnMoveIndex(targetPage, seq) {
         // 이동할 대상 페이지의 URL
         var targetURL = targetPage + "#div" + seq;

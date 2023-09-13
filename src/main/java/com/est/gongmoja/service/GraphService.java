@@ -25,8 +25,7 @@ import java.util.Locale;
 @Service
 public class GraphService {
     private final Resource csvResource = new ClassPathResource("Book1.csv");
-    //private final String csvFile = "src/main/resources/Book1.csv";
-    private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
+    private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
     //@Scheduled(cron = "0 */10 * * * *") // 매 10분(600000밀리초)마다 실행
     public String generateGraph() {
@@ -71,14 +70,11 @@ public class GraphService {
     }
 
     private String generateAndSaveChart(List<Date> xData, List<Double> yData) {
-        Font koreanFont = new Font("맑은 고딕", Font.PLAIN, 12);
-        XYChart chart = new XYChartBuilder().width(800).height(600).title("대신제16호스팩").xAxisTitle("Time").yAxisTitle("비례 경쟁률").build();
+        XYChart chart = new XYChartBuilder().width(800).height(600).title("Daishin 16Spac").xAxisTitle("Time").yAxisTitle("Competition Rate").build();
         chart.getStyler().setChartBackgroundColor(java.awt.Color.WHITE);
         chart.getStyler().setXAxisLabelRotation(0);
         chart.getStyler().setXAxisLabelAlignment(Styler.TextAlignment.Right);
-        chart.getStyler().setAnnotationsFont(koreanFont);
-
-        chart.addSeries("대신증권", xData, yData).setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+        chart.addSeries("Daishin Securities", xData, yData).setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
 
         try {
             BufferedImage chartImage = BitmapEncoder.getBufferedImage(chart);

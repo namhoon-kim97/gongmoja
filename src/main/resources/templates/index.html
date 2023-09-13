@@ -85,7 +85,8 @@
 <div id="wrapper">
 
     <!-- 사이드바 -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
             <div class="sidebar-brand-icon rotate-n-15"></div>
@@ -161,7 +162,10 @@
                 <!-- 공모자들 제목-->
                 <div class="horizontal-container">
                     <!--                    <img src="/static/bootstrap/img/공모자들로고-002.png" alt="공모자들로고" style="width: 48px;">-->
-                    <div class="sidebar-brand-text mx-3">공모자들<sup></sup></div>
+
+                    <a href="/">
+                        <div class="sidebar-brand-text mx-3">공모자들<sup></sup></div>
+                    </a>
                 </div>
 
                 <!-- Topbar Navbar -->
@@ -344,62 +348,58 @@
                                 <h6 class="m-0 font-weight-bold text-primary">공모주 최신 뉴스</h6>
                             </div>
                             <!--뉴스 항목-->
-                            <div th:each="news : ${newsList}">
-                                <div class="news-item">
+
+                            <div th:each="news, iterStat : ${newsList}">
+                                <div class="news-item" th:if="${iterStat.index < 3}">
                                     <p></p>
-                                    <h6><a th:href="${news.newsUrl}" target="_blank"
-                                           th:text="${news.title}">News
-                                        Title</a></h6>
-                                    <p th:text="${news.publisher}" style="display: inline; margin: 0;">
-                                        Publisher</p>
-                                    <img th:src="${news.imageUrl}" alt="News Image" width="20"
-                                         style="max-height: 16px; display: inline;">
+                                    <h6><a th:href="${news.newsUrl}" target="_blank" th:text="${news.title}">News Title</a></h6>
+                                    <p th:text="${news.publisher}" style="display: inline; margin: 0;">Publisher</p>
+                                    <img th:src="${news.imageUrl}" alt="News Image" width="20" style="max-height: 16px; display: inline;">
                                     <span style="display: inline;">|</span>
-                                    <p th:text="${#temporals.format(news.publishedTime, 'yyyy-MM-dd')}"
-                                       style="display: inline; margin: 0;">Published Date</p>
+                                    <p th:text="${#temporals.format(news.publishedTime, 'yyyy-MM-dd')}" style="display: inline; margin: 0;">Published Date</p>
                                     <p th:text="${news.content}">News Summary</p>
                                 </div>
-                                <hr class="sidebar-divider d-none d-md-block">
+                                <hr class="sidebar-divider d-none d-md-block" th:if="${iterStat.index < 2}"> <!-- 여기서 2로 설정하여 3개까지 표시하도록 함 -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; gongmoja 2023</span>
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; gongmoja 2023</span>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
-</footer>
-</div>
-</div>
 
-<script>
-    function fnMove(seq) {
-        var offset = $("#div" + seq).offset();
-        $('html, body').animate({scrollTop: offset.top}, 400);
-    }
+    <script>
+        function fnMove(seq) {
+            var offset = $("#div" + seq).offset();
+            $('html, body').animate({scrollTop: offset.top}, 400);
+        }
 
-</script>
-<!-- Bootstrap core JavaScript-->
-<script src="/static/bootstrap/vendor/jquery/jquery.min.js"></script>
-<script src="/static/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="/static/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="/static/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="/static/bootstrap/js/sb-admin-2.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="/static/bootstrap/js/sb-admin-2.min.js"></script>
 
-<!-- Page level plugins -->
-<script src="/static/bootstrap/vendor/chart.js/Chart.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="/static/bootstrap/vendor/chart.js/Chart.min.js"></script>
 
-<!-- Page level custom scripts -->
-<script src="/static/bootstrap/js/demo/chart-area-demo.js"></script>
-<script src="/static/bootstrap/js/demo/chart-pie-demo.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="/static/bootstrap/js/demo/chart-area-demo.js"></script>
+    <script src="/static/bootstrap/js/demo/chart-pie-demo.js"></script>
 </div>
 </body>
 </html>

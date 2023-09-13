@@ -11,4 +11,8 @@ public class UserRegisterRequestDto {
     private String nickname;
     private String email;
     private String password_check;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f0add1f904fc771d72c9b21f8ba777c563b9260e

@@ -29,7 +29,7 @@ public class UpdatedNewsCrawlingService {
     private final UpdatedNewsRepository newsRepository;
 
     @PostConstruct
-    //@Scheduled(cron = "0 */10 * * * *")
+    @Scheduled(cron = "0 */10 * * * *")
     public void getUpdatedNews(){
         String url = "https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EA%B3%B5%EB%AA%A8%EC%A3%BC";
         try {

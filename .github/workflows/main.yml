@@ -1,16 +1,16 @@
-name: CICD Test
+name: gongmoja-deploy
 run-name: Running
 on:
   push:
     branches:
-      - develop
+      - main
       - 'releases/**'
 
 env:
   AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET: my-s3-bucket97
-  AWS_CODE_DEPLOY_APPLICATION: cicd-test-CD
-  AWS_CODE_DEPLOY_GROUP: cicd-test-CD-group
+  AWS_S3_BUCKET: gongmoja-bucket
+  AWS_CODE_DEPLOY_APPLICATION: gongmoja
+  AWS_CODE_DEPLOY_GROUP: gongmoja-group
 
 jobs:
   build-with-gradle:
@@ -19,7 +19,7 @@ jobs:
     - name: production 브랜치로 이동
       uses: actions/checkout@v3
       with:
-        ref: develop
+        ref: main
     - name: JDK 17 설치
       uses: actions/setup-java@v3
       with:

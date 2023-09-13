@@ -15,7 +15,7 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
 
         registry.addEndpoint("/chatting")
                 .setAllowedOriginPatterns("*")
-                .setAllowedOrigins("http://13.209.58.79:8080");
+                .setAllowedOrigins("http://gongmoja.store");
     }
 
     @Override
