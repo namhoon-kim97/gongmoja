@@ -21,7 +21,6 @@
 - 항상 클린한 경험을 위하여 비매너 유저들을 신고 할 수 있습니다
  
 ### 📈 프로젝트 소개
-<p align="center"><img src="https://ifh.cc/g/K24wo2.jpg"  width="320" height="320"/></p>
 
 <div align="center">
   <img src="https://github.com/gongmoja/gongmoja/assets/124870889/de37d2df-540f-4767-b266-1220005fc5d0" /><br></br>
